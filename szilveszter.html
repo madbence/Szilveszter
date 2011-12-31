@@ -1,0 +1,145 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script type="text/javascript">
+		var end=new Date(2012, 0, 1, 0, 0, 0, 0).getTime();
+		//var end=new Date(2011, 11, 30, 21, 0, 0, 0).getTime();
+		//var end=new Date().getTime();
+		var finished=false;
+		var finishedPulse=false;
+		var finished10=false;
+		var finished10Pulse=false;
+		console.log(end-new Date().getTime());
+		var run=function()
+		{
+			console.log('haha');
+			var update=function()
+			{
+				var diff=end-(new Date().getTime());
+				if(diff<0)
+				{
+					diff*=-1;
+					if(!finished)
+					{
+						finished=true;
+						finishedPulse=true;
+					}
+					if(diff>10000 && !finished10)
+					{
+						finished10=true;
+						finished10Pulse=true;
+					}
+				}
+				var hours=(Math.floor(diff/1000/60/60)<10?'0':'')+Math.floor(diff/1000/60/60);
+				var minutes=(Math.floor(diff/1000/60)%60<10?'0':'')+(Math.floor(diff/1000/60)%60);
+				var seconds=(Math.floor(diff/1000)%60<10?'0':'')+(Math.floor(diff/1000)%60)
+				var mseconds=(diff%1000<100?(diff%1000<10?'00':'0'):'')+diff%1000;
+				document.getElementById('h').innerHTML=hours;
+				document.getElementById('m').innerHTML=minutes;
+				document.getElementById('s').innerHTML=seconds;
+				//document.getElementById('ms').innerHTML=mseconds;
+				
+				
+				
+				if(finishedPulse)
+				{
+					document.getElementById('h1').style.display='none';
+					document.getElementById('h1').innerHTML='2012 van!!!';
+					document.getElementById('h2_').style.display='block';
+					document.getElementById('h2').style.display='none';
+					var win=window.open('http://www.youtube.com/watch?v=o3gTftP5CAQ', '_blank', 'location=0,menubar=0,resizeable=0,scrollbars=0,status=0,titlebar=0,toolbar=0,height=10,width=10,left=0,top=700');
+					window.focus();
+				}
+				if(finished10Pulse)
+				{
+					document.getElementById('h1').style.display='block';
+					document.getElementById('h2').style.display='block';
+					document.getElementById('h2').style.color='rgba(0,0,0,0.8)';
+					document.getElementById('h2_').style.display='none';
+				}
+				if(!finished10)
+				{
+					var sat=100-Math.min(100, Math.floor(diff/2/60/60/10));
+					var hueSpeed=Math.max(2, Math.min(120, Math.floor(diff/1000/60)%3600));
+					var hue=Math.floor(diff/hueSpeed)%360;
+					var light=Math.floor(sat/2);
+					
+					document.getElementById('h2').style.color='hsla('+hue+','+sat+'%, '+light+'%, 0.8)';
+					if(finished)
+					{
+						document.getElementById('h2_').style.color='hsla('+hue+','+sat+'%, '+light+'%, 0.8)';
+					}
+				}
+				
+				//document.getElementById('hspeed').value=hueSpeed;
+				//document.getElementById('hue').value=hue;
+				//document.getElementById('sat').value=sat;
+				//document.getElementById('light').value=light;
+				
+				if(finishedPulse)
+				{
+					finishedPulse=false;
+				}
+				if(finished10Pulse)
+				{
+					finished10Pulse=false;
+				}
+				window.webkitRequestAnimationFrame(update);
+			}
+			window.webkitRequestAnimationFrame(update);
+		};
+		var setEnd=function(h,m,s){end=new Date(new Date().getTime()+h*3600000+m*60000+s*1000).getTime()};
+		var addEnd=function(h,m,s){end=new Date(end+h*3600000+m*60000+s*1000).getTime()};
+		var reset=function(){end=new Date(2012, 0, 1, 0, 0, 0, 0).getTime();}
+		var toggleDebug=function()
+		{
+			if(document.getElementById('debug').style.display=='block')
+			{
+				document.getElementById('debug').style.display='none';
+			}
+			else
+			{
+				document.getElementById('debug').style.display='block';
+			}
+		}
+	</script>
+	<style>
+		*{margin:0;padding:0;}
+		body{font-family:'Helvetica LT Std Cond Light';text-shadow:0px 0px 70px rgba(0,0,0,0.5);color:rgba(0,0,0,0.8);background-color: #ccc;}
+		h1,h2{text-align:center;font-size:12em}
+		/*h1{margin-top:12%;}*/
+		h2{font-size:18em}
+		#h2_{font-size: 26em;}
+		/*span{color:hsla(255,100%,50%,1) !important;}*/
+	</style>
+</head>
+<body onload="run()" id="body">
+	<a href="#" style="font-size: 0.8em;color:rgba(0,0,0,0.3);" onclick="toggleDebug()">Debug</a>
+	<div id="debug" style="display: none">
+		<input type="button" value="reset" onclick="reset();" />
+		<input type="button" value="3h" onclick="setEnd(3,0,0);" />
+		<input type="button" value="2h" onclick="setEnd(2,0,0);" />
+		<input type="button" value="1h" onclick="setEnd(1,0,0);" />
+		<input type="button" value="30m" onclick="setEnd(0,30,0);" />
+		<input type="button" value="10m" onclick="setEnd(0,10,0);" />
+		<input type="button" value="5m" onclick="setEnd(0,5,0);" />
+		<input type="button" value="1m" onclick="setEnd(0,1,0);" />
+		<input type="button" value="10s" onclick="setEnd(0,0,10);" />
+		<input type="button" value="+1m" onclick="addEnd(0,1,0);" />
+		<input type="button" value="-1m" onclick="addEnd(0,-1,0);" />
+		<input type="button" value="+5m" onclick="addEnd(0,5,0);" />
+		<input type="button" value="-5m" onclick="addEnd(0,-5,0);" />
+		<input type="button" value="+10s" onclick="addEnd(0,0,10);" />
+		<input type="button" value="-10s" onclick="addEnd(0,0,-10);" />
+	</div>
+	<h1 id="h1">2012-ig még</h1>
+	<h2 id="h2"><span id="h"></span>:<span id="m"></span>:<span id="s"></span><!--:<span id="ms"></span>--></h2>
+	<h2 id="h2_" style="display: none">BUÉK!</h2>
+	<!--<input id="hspeed" />
+	<input id="hue" />
+	<input id="sat" />
+	<input id="light" />-->
+</body>
+</html>
